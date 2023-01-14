@@ -1,29 +1,28 @@
 #!/usr/bin/env python3
 
 import argparse
-import textwrap
 
 import weekly_high_score as weekly_high_scores
-import free_agents as current_free_agents
 import top_scorer as top_scorer
+import playoff_payout as playoff_payout
 
 
 def handleArgs():
     parser = argparse.ArgumentParser(
-        prog="ESPN API Data Parser",
-        description="Season Recap Tool",
-        formatter_class=argparse.RawDescriptionHelpFormatter,
+        prog="ESPN API Data Parser", description="Season Recap Tool",
     )
     parser.add_argument(
-        "-a", "--action", required=True, choices=["weekly_high_scores", "free_agents"]
+        "-a",
+        "--action",
+        required=True,
+        choices=["weekly_high_scores", "top_scorer", "playoff_payouts"],
     )
     parser.add_argument(
         "-p",
         "--payout",
+        # required=True,
         help="Set the payout amount to be calculated for weekly winners",
     )
-    parser.add_argument("-t", "--top_scorer")
-    parser.print_help()
     args = parser.parse_args()
     if args.payout:
         print()
@@ -37,10 +36,10 @@ def main():
 
     if args.action == "weekly_high_scores":
         weekly_high_scores.calculate_payouts(args.payout)
-    elif args.action == "free_agents":
-        current_free_agents.get_free_agents()
     elif args.action == "top_scorer":
-        top_scorer.get_top_scorer()
+        top_scorer.get_top_scorer(args.payout)
+    elif args.action == "playoff_payouts":
+        playoff_payout.get_playoff_payouts()
 
 
 main()
