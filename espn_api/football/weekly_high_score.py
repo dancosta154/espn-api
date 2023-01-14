@@ -5,14 +5,14 @@ import json
 league = creds.keys()
 
 
-def calculate_payouts():
+def calculate_payouts(payout):
 
     matchup_count = int(len(league.teams) / 2)
     home_high_score = 0
     away_high_score = 0
     high_score = []
 
-    for week in range(1, 15):
+    for week in range(1, 5):
         home_high_score = 0
         away_high_score = 0
 
@@ -30,13 +30,13 @@ def calculate_payouts():
 
     weekly_winners = []
 
-    for i in range(14):
+    for i in range(4):
         if high_score[i].rsplit(",", 1)[1].strip(")")[2:] not in weekly_winners:
             weekly_winners.append(high_score[i].rsplit(",", 1)[1].strip(")")[2:])
         continue
 
     weekly_payouts = []
-    payout = 10
+    payout = int(payout)
 
     for i in range(len(weekly_winners)):
         sum_wins = sum(weekly_winners[i] in s for s in high_score)
