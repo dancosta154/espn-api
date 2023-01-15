@@ -12,7 +12,7 @@ def calculate_payouts(payout):
     away_high_score = 0
     high_score = []
 
-    for week in range(1, 5):
+    for week in range(1, 15):
         home_high_score = 0
         away_high_score = 0
 
@@ -24,15 +24,15 @@ def calculate_payouts(payout):
                 away_high_score = league.box_scores(week)[i].away_score
                 away_team = str(league.box_scores(week)[i].away_team).strip("Team()")
         high_score.append(
-            f"Week {week}: {max((home_high_score, home_team), (away_high_score, away_team))}"
+            max((home_high_score, home_team), (away_high_score, away_team))
         )
         print(f"Calculated High Score for Week {week}...")
 
     weekly_winners = []
 
-    for i in range(4):
-        if high_score[i].rsplit(",", 1)[1].strip(")")[2:] not in weekly_winners:
-            weekly_winners.append(high_score[i].rsplit(",", 1)[1].strip(")")[2:])
+    for i in range(14):
+        if high_score[i][1] not in weekly_winners:
+            weekly_winners.append(high_score[i][1])
         continue
 
     weekly_payouts = []
@@ -40,16 +40,17 @@ def calculate_payouts(payout):
 
     for i in range(len(weekly_winners)):
         sum_wins = sum(weekly_winners[i] in s for s in high_score)
-        weekly_payouts.append(
-            f"{weekly_winners[i]} won {sum_wins} times for a payout of ${sum_wins * payout}"
-        )
+        weekly_payouts.append((weekly_winners[i], sum_wins * payout))
+
+    weekly_payouts = sorted(
+        [str(x).strip("()") for x in weekly_payouts], key=lambda x: x[-1]
+    )
 
     with open(
-        "output/weekly_high_scores_payout_"
-        + datetime.datetime.now().strftime("%Y_%m_%d-%I:%M:%S")
-        + ".csv",
+        f"output/Weekly_High_Score_Payouts_{datetime.datetime.today().year - 1}.csv",
         "w",
     ) as f:
-        json.dump(weekly_payouts, f, indent=0, ensure_ascii=False)
+        for line in weekly_payouts:
+            f.write(f"{line}\n")
 
-    return
+    return print(f"{f.name.strip('/output')} has been added to the Output directory.")

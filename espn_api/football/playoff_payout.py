@@ -28,10 +28,7 @@ def get_playoff_payouts():
     final_payout = [str(x).strip("()") for x in final_payout]
 
     with open(
-        "output/Playoff_Payouts_"
-        + datetime.datetime.now().strftime("%Y_%m_%d-%I:%M:%S")
-        + ".csv",
-        "w",
+        f"output/Playoff_Payouts_{datetime.datetime.today().year - 1}.csv", "w",
     ) as f:
         for line in final_payout:
             f.write(f"{line}\n")

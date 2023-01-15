@@ -6,16 +6,15 @@ league = creds.keys()
 
 def get_top_scorer(payout):
     annual_payout = int(payout)
-    top_scorer = (
-        f'{str(league.top_scorer()).strip("Team()")} earned ${int(annual_payout)}.'
-    )
+    top_scorer = [(str(league.top_scorer()).strip("Team()"), annual_payout)]
+
+    top_scorer = [str(x).strip("()") for x in top_scorer]
 
     with open(
-        "output/Season_High_Top_Scorer"
-        + datetime.datetime.now().strftime("%Y_%m_%d-%I:%M:%S")
-        + ".csv",
+        f"output/Season_High_Top_Scorer_Payout_{datetime.datetime.today().year - 1}.csv",
         "w",
     ) as f:
-        f.write(top_scorer)
+        for line in top_scorer:
+            f.write(f"{line}\n")
 
     return print(f"{f.name.strip('/output')} has been added to the Output directory.")
